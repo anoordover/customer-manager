@@ -1,8 +1,8 @@
 package sk.bsmk.manager.customer
 
 final case class Customer(
-  email: String,
-  voucherIds: Set[String] = Set.empty
+    email: String,
+    voucherIds: Set[String] = Set.empty
 ) {
 
   def addVoucher(voucherId: String): Customer = {

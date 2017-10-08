@@ -20,20 +20,20 @@ class CustomerActor(val persistenceId: String) extends PersistentActor with Acto
   }
 
   override def receiveRecover: PartialFunction[Any, Unit] = {
-    case event: VoucherAdded ⇒ updateState(event)
+    case event: VoucherAdded                  ⇒ updateState(event)
     case SnapshotOffer(_, snapshot: Customer) => state = Option(snapshot)
   }
 
   override def receiveCommand: PartialFunction[Any, Unit] = {
 
-    case command@RegisterCustomer(email) ⇒
+    case command @ RegisterCustomer(email) ⇒
       log.info("Registering customer with id {} with {}", persistenceId, command)
       persist(CustomerRegistered(email)) { event ⇒
         updateState(event)
         context.system.eventStream.publish(event)
       }
 
-    case command@AddVoucher(voucherId) ⇒
+    case command @ AddVoucher(voucherId) ⇒
       log.info("Applying {} to customer with {}", command, persistenceId)
       persist(VoucherAdded(voucherId)) { event ⇒
         updateState(event)
@@ -52,4 +52,3 @@ object CustomerActor {
   def props(persistenceId: String): Props = Props(new CustomerActor(persistenceId))
 
 }
-

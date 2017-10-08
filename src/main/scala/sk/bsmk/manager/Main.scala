@@ -13,7 +13,7 @@ import scala.language.postfixOps
 object Main extends App {
 
   val system = ActorSystem("customer-manager")
-  val log = Logging.getLogger(system, this)
+  val log    = Logging.getLogger(system, this)
 
   val persistenceId = "1"
 
@@ -29,8 +29,8 @@ object Main extends App {
   implicit val timeout: Timeout = Timeout(5 seconds)
   Await.result(customer ? GetState, 5.seconds) match {
     case Some(actual) ⇒ log.info("Customer with id={} has state={}", persistenceId, actual)
-    case None ⇒ log.error("Customer with id={} with none state", persistenceId)
-    case _ ⇒ log.error("Unknown return from GetState")
+    case None         ⇒ log.error("Customer with id={} with none state", persistenceId)
+    case _            ⇒ log.error("Unknown return from GetState")
   }
 
   Await.result(system.terminate(), 5 seconds)

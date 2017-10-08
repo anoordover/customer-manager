@@ -2,7 +2,7 @@ package sk.bsmk.manager.customer
 
 import akka.persistence.journal.EventAdapter
 
-class CustomerEventAdapter extends EventAdapter  {
+class CustomerEventAdapter extends EventAdapter {
 
   override def manifest(event: Any) = ???
 
