@@ -1,0 +1,63 @@
+buildscript {
+  ext {
+    h2Version = '1.4.196'
+  }
+
+  dependencies {
+    classpath "com.h2database:h2:$h2Version"
+  }
+}
+
+plugins {
+  id 'scala'
+  id 'application'
+  id "org.flywaydb.flyway" version "4.2.0"
+}
+
+group 'sk.bsmk'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+mainClassName = 'sk.bsmk.manager.customer.Main'
+
+repositories {
+  mavenCentral()
+  jcenter()
+}
+
+ext {
+  scalaVersion = '2.12'
+  akkaVersion = '2.5.6'
+}
+
+dependencies {
+
+  compile("org.scala-lang:scala-library:$scalaVersion.3")
+  compile("com.typesafe.akka:akka-actor_$scalaVersion:$akkaVersion")
+  compile("com.softwaremill.quicklens:quicklens_$scalaVersion:1.4.11")
+
+  compile("com.typesafe.akka:akka-cluster_$scalaVersion:$akkaVersion")
+
+  compile("com.typesafe.akka:akka-slf4j_$scalaVersion:$akkaVersion")
+  compile("ch.qos.logback:logback-classic:1.2.3")
+  compile("org.fusesource.jansi:jansi:1.16")
+
+  compile("com.typesafe.akka:akka-persistence_$scalaVersion:$akkaVersion")
+  compile("com.typesafe.akka:akka-persistence-query_$scalaVersion:$akkaVersion")
+  compile("com.github.dnvriend:akka-persistence-jdbc_$scalaVersion:3.0.0")
+  compile("com.h2database:h2:$h2Version")
+
+  testCompile("com.typesafe.akka:akka-testkit_$scalaVersion:$akkaVersion")
+  testCompile("org.scalatest:scalatest_$scalaVersion:3.0.4")
+
+}
+
+flyway {
+  url = 'jdbc:h2:file:./build/customer'
+  user = 'sa'
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '4.2.1'
+}
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- for color on windows -->
+    <withJansi>true</withJansi>
+    <encoder>
+      <pattern>[%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="${log.root:-info}">
+    <appender-ref ref="STDOUT" />
+  </root>
+
+  <logger name="slick" level="INFO" />
+  <logger name="com.zaxxer.hikari" level="INFO" />
+
+</configuration>
