@@ -42,7 +42,7 @@ class CustomerActor(val persistenceId: String) extends PersistentActor with Acto
           saveSnapshot(state)
       }
 
-    case "print" ⇒ log.info("Customer with id={} has state {}", persistenceId, state)
+    case GetState ⇒ sender() ! state
   }
 
 }
