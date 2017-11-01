@@ -1,18 +1,19 @@
 buildscript {
   ext {
-    h2Version = '1.4.196'
+    h2Dependency = 'com.h2database:h2:1.4.196'
   }
 
   dependencies {
-    classpath "com.h2database:h2:$h2Version"
+    classpath h2Dependency
   }
 }
 
 plugins {
   id 'scala'
   id 'application'
-  id "org.flywaydb.flyway" version "4.2.0"
   id "com.diffplug.gradle.spotless" version "3.6.0"
+  id "org.flywaydb.flyway" version "4.2.0"
+  id "nu.studer.jooq" version "2.0.9"
 }
 
 group 'sk.bsmk'
@@ -30,12 +31,16 @@ ext {
   scalaVersion = '2.12'
   akkaVersion = '2.5.6'
   akkaHttpVersion = '10.0.10'
+  dbUrl = 'jdbc:h2:file:./build/customer'
+  dbUser = 'sa'
 }
 
 dependencies {
 
+  jooqRuntime h2Dependency
+
   // basic
-  compile("org.scala-lang:scala-library:$scalaVersion.3")
+  compile("org.scala-lang:scala-library:$scalaVersion.4")
   compile("com.typesafe.akka:akka-actor_$scalaVersion:$akkaVersion")
   compile("com.softwaremill.quicklens:quicklens_$scalaVersion:1.4.11")
 
@@ -57,8 +62,9 @@ dependencies {
   // persistence
   compile("com.typesafe.akka:akka-persistence_$scalaVersion:$akkaVersion")
   compile("com.typesafe.akka:akka-persistence-query_$scalaVersion:$akkaVersion")
-  compile("com.github.dnvriend:akka-persistence-jdbc_$scalaVersion:3.0.0")
-  compile("com.h2database:h2:$h2Version")
+  compile("com.github.dnvriend:akka-persistence-jdbc_$scalaVersion:3.0.1")
+  compile(h2Dependency)
+  compile("org.jooq:jooq")
 
   // testing
   testCompile("com.typesafe.akka:akka-testkit_$scalaVersion:$akkaVersion")
@@ -67,9 +73,8 @@ dependencies {
 
 }
 
-flyway {
-  url = 'jdbc:h2:file:./build/customer'
-  user = 'sa'
+clean {
+  delete "$projectDir/src/main/java/sk/bsmk/customer/persistence/model"
 }
 
 spotless {
@@ -78,7 +83,44 @@ spotless {
   }
 }
 
+flyway {
+  url = dbUrl
+  user = dbUser
+}
+
+jooq {
+  version = '3.10.1'
+  edition = 'OSS'
+  customer(sourceSets.main) {
+    jdbc {
+      url = dbUrl
+      user = dbUser
+    }
+    generator {
+      database {
+        inputSchema = 'PUBLIC'
+        excludes = 'JOURNAL|SNAPSHOT|SCHEMA_VERSION'
+      }
+      generate {
+        relations = false
+        deprecated = false
+        records = false
+        immutablePojos = false
+        fluentSetters = false
+        javaTimeTypes = true
+      }
+      target {
+        directory = 'src/main/java'
+        packageName = 'sk.bsmk.customer.persistence.model'
+      }
+    }
+  }
+}
+
+generateCustomerJooqSchemaSource.dependsOn flywayMigrate
+generateCustomerJooqSchemaSource.outputs.upToDateWhen { false }
+
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.2.1'
+  gradleVersion = '4.3'
 }
 
