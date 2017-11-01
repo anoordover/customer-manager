@@ -1,4 +1,4 @@
-package sk.bsmk.manager.customer
+package sk.bsmk.customer
 
 import akka.persistence.journal.EventAdapter
 

@@ -1,4 +1,4 @@
-package sk.bsmk.manager.customer
+package sk.bsmk.customer
 
 import akka.actor.{ActorLogging, Props}
 import akka.persistence.{PersistentActor, SnapshotOffer}

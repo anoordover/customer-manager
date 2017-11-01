@@ -1,10 +1,9 @@
-package sk.bsmk.manager
+package sk.bsmk.customer
 
 import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.pattern.ask
 import akka.util.Timeout
-import sk.bsmk.manager.customer._
 
 import scala.concurrent.Await
 import scala.concurrent.duration._

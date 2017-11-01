@@ -1,3 +1,3 @@
-package sk.bsmk.manager.customer.registration
+package sk.bsmk.customer.registration
 
 case class CustomerExistsException(email: String) extends Exception

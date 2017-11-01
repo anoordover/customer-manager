@@ -1,4 +1,4 @@
-package sk.bsmk.manager.customer.registration
+package sk.bsmk.customer.registration
 
 import akka.actor.{Actor, ActorLogging}
 
