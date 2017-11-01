@@ -14,13 +14,15 @@ plugins {
   id "com.diffplug.gradle.spotless" version "3.6.0"
   id "org.flywaydb.flyway" version "4.2.0"
   id "nu.studer.jooq" version "2.0.9"
+
+  id "com.github.maiflai.scalatest" version "0.18"
 }
 
 group 'sk.bsmk'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
-mainClassName = 'sk.bsmk.manager.customer.Main'
+mainClassName = 'sk.bsmk.manager.customer.CustomerApp'
 
 repositories {
   mavenCentral()
@@ -71,12 +73,13 @@ dependencies {
   testCompile("org.scalatest:scalatest_$scalaVersion:3.0.4")
   testCompile("com.typesafe.akka:akka-http-testkit_$scalaVersion:$akkaHttpVersion")
   testCompile("com.typesafe.akka:akka-testkit_$scalaVersion:$akkaVersion")
-//  testCompile("io.rest-assured:scala-support:3.0.5")
+  testRuntime 'org.pegdown:pegdown:1.6.0'
 
 }
 
 clean {
-  delete "$projectDir/src/main/java/sk/bsmk/customer/persistence/model"
+  delete "$projectDir/out"
+  delete "$projectDir/src/main/java/sk/bsmk/customer/persistence/model/"
 }
 
 spotless {
@@ -118,6 +121,8 @@ jooq {
     }
   }
 }
+
+cleanGenerateCustomerJooqSchemaSource.enabled = false
 
 generateCustomerJooqSchemaSource.dependsOn flywayMigrate
 generateCustomerJooqSchemaSource.outputs.upToDateWhen { false }
