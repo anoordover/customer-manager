@@ -17,16 +17,21 @@ object CustomerApi extends HttpApp with JsonSupport {
       }
     } ~
       pathPrefix("customers") {
-        get {
-          complete {
-            CustomerListResponse(
-              List(
-                CustomerListResponseItem(UUID.randomUUID(), "somemail"),
-                CustomerListResponseItem(UUID.randomUUID(), "somemail")
-              )
-            )
+        post {
+          entity(as[CustomerRegistrationRequest]) { registrationRequest ⇒
+            complete(registrationRequest.email)
           }
-        }
+        } ~
+          get {
+            complete {
+              CustomerListResponse(
+                List(
+                  CustomerListResponseItem(UUID.randomUUID(), "somemail"),
+                  CustomerListResponseItem(UUID.randomUUID(), "somemail")
+                )
+              )
+            }
+          }
       }
   }
 
