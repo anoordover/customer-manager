@@ -6,4 +6,4 @@ import sk.bsmk.customer.Email
 
 final case class CustomerListResponse(items: Seq[CustomerListResponseItem])
 
-final case class CustomerListResponseItem(uuid: String, email: Email)
+final case class CustomerListResponseItem(uuid: UUID, email: Email)

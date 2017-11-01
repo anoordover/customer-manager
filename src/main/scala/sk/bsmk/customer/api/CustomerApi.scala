@@ -21,8 +21,8 @@ object CustomerApi extends HttpApp with JsonSupport {
           complete {
             CustomerListResponse(
               List(
-                CustomerListResponseItem(UUID.randomUUID().toString, "somemail"),
-                CustomerListResponseItem(UUID.randomUUID().toString, "somemail")
+                CustomerListResponseItem(UUID.randomUUID(), "somemail"),
+                CustomerListResponseItem(UUID.randomUUID(), "somemail")
               )
             )
           }
