@@ -6,14 +6,20 @@ object CustomerApi extends HttpApp {
 
   val ApiInfo: String = "Customer API"
 
-  override def routes: Route = get {
-    pathSingleSlash {
-      complete {
-        "Captain on the bridge!"
+  override def routes: Route = pathPrefix("api") {
+    pathEndOrSingleSlash {
+      get {
+        complete {
+          ApiInfo
+        }
       }
     } ~
-      path("ping") {
-        complete("PONG!")
+      pathPrefix("customers") {
+        get {
+          complete {
+            "foo"
+          }
+        }
       }
   }
 
