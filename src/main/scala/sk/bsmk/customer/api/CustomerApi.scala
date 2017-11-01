@@ -1,8 +1,10 @@
 package sk.bsmk.customer.api
 
+import java.util.UUID
+
 import akka.http.scaladsl.server.{HttpApp, Route}
 
-object CustomerApi extends HttpApp {
+object CustomerApi extends HttpApp with JsonSupport {
 
   val ApiInfo: String = "Customer API"
 
@@ -17,7 +19,12 @@ object CustomerApi extends HttpApp {
       pathPrefix("customers") {
         get {
           complete {
-            "foo"
+            CustomerListResponse(
+              List(
+                CustomerListResponseItem(UUID.randomUUID().toString, "somemail"),
+                CustomerListResponseItem(UUID.randomUUID().toString, "somemail")
+              )
+            )
           }
         }
       }
