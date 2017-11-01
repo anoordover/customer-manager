@@ -53,11 +53,12 @@ dependencies {
 
   // http
   compile("com.typesafe.akka:akka-http_$scalaVersion:$akkaHttpVersion")
+  compile("com.typesafe.akka:akka-http-spray-json_$scalaVersion:$akkaHttpVersion")
 
   // logging
   compile("com.typesafe.akka:akka-slf4j_$scalaVersion:$akkaVersion")
   compile("ch.qos.logback:logback-classic:1.2.3")
-  compile("org.fusesource.jansi:jansi:1.16")
+  compile("org.fusesource.jansi:jansi:1.16")  // for windows
 
   // persistence
   compile("com.typesafe.akka:akka-persistence_$scalaVersion:$akkaVersion")
@@ -67,9 +68,10 @@ dependencies {
   compile("org.jooq:jooq")
 
   // testing
-  testCompile("com.typesafe.akka:akka-testkit_$scalaVersion:$akkaVersion")
-  testCompile("com.typesafe.akka:akka-http-testkit_$scalaVersion:$akkaHttpVersion")
   testCompile("org.scalatest:scalatest_$scalaVersion:3.0.4")
+  testCompile("com.typesafe.akka:akka-http-testkit_$scalaVersion:$akkaHttpVersion")
+  testCompile("com.typesafe.akka:akka-testkit_$scalaVersion:$akkaVersion")
+//  testCompile("io.rest-assured:scala-support:3.0.5")
 
 }
 
