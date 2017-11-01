@@ -6,13 +6,13 @@ import sk.bsmk.customer.api.{CustomerListResponse, CustomerRegistrationRequest, 
 
 class CustomerRegistrationFeatureSpec extends ApiFeatureSpec {
 
-  "The customers resource" should {
-    "register customer for POST request" in {
-      val request = CustomerRegistrationRequest("some@mail.com")
-      Post("/api/customers", request) ~> route ~> check {
-        status shouldEqual StatusCodes.OK
-      }
-    }
-  }
+//  "The customers resource" should {
+//    "register customer for POST request" in {
+//      val request = CustomerRegistrationRequest("some@mail.com")
+//      Post("/api/customers", request) ~> route ~> check {
+//        status shouldEqual StatusCodes.OK
+//      }
+//    }
+//  }
 
 }

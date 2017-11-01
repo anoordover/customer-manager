@@ -1,6 +1,7 @@
 package sk.bsmk.customer.features
 
-import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.{HttpRequest, StatusCodes}
 import sk.bsmk.customer.ApiFeatureSpec
 import sk.bsmk.customer.api.CustomerApi
 
@@ -8,9 +9,9 @@ class ApiInfoFeatureSpec extends ApiFeatureSpec {
 
   "The api" should {
     "return an info for GET requests" in {
-      Get("/api") ~> route ~> check {
-        status shouldEqual StatusCodes.OK
-        responseAs[String] shouldEqual CustomerApi.ApiInfo
+      Http().singleRequest(HttpRequest(uri = s"$BaseUri/api")) map { resp =>
+        resp.status shouldEqual StatusCodes.OK
+//        resp.entity
       }
     }
   }

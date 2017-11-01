@@ -71,8 +71,6 @@ dependencies {
 
   // testing
   testCompile("org.scalatest:scalatest_$scalaVersion:3.0.4")
-  testCompile("com.typesafe.akka:akka-http-testkit_$scalaVersion:$akkaHttpVersion")
-  testCompile("com.typesafe.akka:akka-testkit_$scalaVersion:$akkaVersion")
   testRuntime 'org.pegdown:pegdown:1.6.0'
 
 }
