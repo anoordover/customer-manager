@@ -13,18 +13,9 @@ class ApiInfoFeatureSpec extends ApiFeatureSpec {
     "accessed with GET request" should {
       implicit val futureResp: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = s"$BaseUri/api"))
 
-      shouldHaveStatusOk
-
-      shouldHaveContentType(ContentTypes.`text/plain(UTF-8)`)
-
-      s"return '${CustomerApi.ApiInfo}' content" in {
-        futureResp flatMap { resp ⇒
-          checkEntity[String](resp) { entity ⇒
-            entity shouldEqual CustomerApi.ApiInfo
-          }
-        }
-      }
-
+      haveStatusOk
+      haveContentType(ContentTypes.`text/plain(UTF-8)`)
+      haveEntityEqualTo(CustomerApi.ApiInfo)
     }
   }
 

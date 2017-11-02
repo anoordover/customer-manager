@@ -23,7 +23,7 @@ class CustomerRegistrationFeatureSpec extends ApiFeatureSpec {
           Http().singleRequest(request)
         }
 
-      shouldHaveStatusOk
+      haveStatusOk
 //      shouldHaveContentType(ContentTypes.`application/json`)
 
     }
