@@ -86,6 +86,10 @@ spotless {
   }
 }
 
+compileScala {
+  dependsOn { spotlessApply }
+}
+
 flyway {
   url = dbUrl
   user = dbUser

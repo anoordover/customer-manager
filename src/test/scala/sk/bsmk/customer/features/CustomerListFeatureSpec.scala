@@ -2,11 +2,13 @@ package sk.bsmk.customer.features
 
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{ContentTypes, HttpRequest, HttpResponse}
+import org.scalatest.DoNotDiscover
 import sk.bsmk.customer.ApiFeatureSpec
 import sk.bsmk.customer.api.CustomerListResponse
 
 import scala.concurrent.Future
 
+@DoNotDiscover
 class CustomerListFeatureSpec extends ApiFeatureSpec {
 
   "The customer list endpoint" when {
