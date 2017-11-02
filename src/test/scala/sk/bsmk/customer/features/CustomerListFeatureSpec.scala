@@ -1,16 +1,19 @@
 package sk.bsmk.customer.features
 
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.HttpRequest
+import akka.http.scaladsl.model.{ContentTypes, HttpRequest, HttpResponse}
 import sk.bsmk.customer.ApiFeatureSpec
+
+import scala.concurrent.Future
 
 class CustomerListFeatureSpec extends ApiFeatureSpec {
 
   "The customer list endpoint" when {
     "accessed with GET request" should {
-      val futureResp = Http().singleRequest(HttpRequest(uri = s"$BaseUri/api/customers"))
+      implicit val futureResp: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = s"$BaseUri/api/customers"))
 
-      shouldReturnOk(futureResp)
+      shouldHaveStatusOk
+      shouldHaveContentType(ContentTypes.`application/json`)
 
     }
   }
