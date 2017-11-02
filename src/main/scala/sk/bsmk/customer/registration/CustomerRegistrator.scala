@@ -12,6 +12,7 @@ class CustomerRegistrator(persistenceIdGenerator: CustomerPersistenceIdGenerator
     case RegisterCustomer(email) ⇒
       val persistenceId = persistenceIdGenerator.generate()
       log.info("Generated {} for registration with {}", persistenceId, email)
+
   }
 
 }

@@ -31,6 +31,7 @@ class CustomerApi(
         post {
           entity(as[CustomerRegistrationRequest]) { registrationRequest ⇒
             registrator ! RegisterCustomer(registrationRequest.email)
+
             complete(registrationRequest.email)
           }
         } ~
