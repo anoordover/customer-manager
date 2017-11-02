@@ -10,14 +10,14 @@ import scala.concurrent.Future
 
 trait ResponseBehaviors { this: AsyncWordSpec with Matchers ⇒
 
-  def haveStatusOk(implicit futureResponse: Future[HttpResponse]): Unit =
+  def haveStatusOk(futureResponse: ⇒ Future[HttpResponse]): Unit =
     "return OK status" in {
       futureResponse map { resp ⇒
         resp.status shouldEqual StatusCodes.OK
       }
     }
 
-  def haveContentType(contentType: ContentType)(implicit futureHttpResponse: Future[HttpResponse]): Unit = {
+  def haveContentType(contentType: ContentType, futureHttpResponse: ⇒ Future[HttpResponse]): Unit = {
     s"return '$contentType' Content-Type" in {
       futureHttpResponse map { resp ⇒
         val headerValue = resp.header[`Content-Type`] map { header ⇒
@@ -28,9 +28,10 @@ trait ResponseBehaviors { this: AsyncWordSpec with Matchers ⇒
     }
   }
 
-  def haveEntityEqualTo[T](expected: T)(implicit futureHttpResponse: Future[HttpResponse],
-                                        materializer: ActorMaterializer,
-                                        um: Unmarshaller[ResponseEntity, T]): Unit = {
+  def haveEntityEqualTo[T](expected: T, futureHttpResponse: ⇒ Future[HttpResponse])(
+      implicit
+      materializer: ActorMaterializer,
+      um: Unmarshaller[ResponseEntity, T]): Unit = {
     s"return '$expected' content" in {
       futureHttpResponse flatMap { resp ⇒
         checkEntity[T](resp) { entity ⇒
@@ -40,9 +41,8 @@ trait ResponseBehaviors { this: AsyncWordSpec with Matchers ⇒
     }
   }
 
-  def haveEntity[T](description: String)(check: T ⇒ Assertion)(implicit futureHttpResponse: Future[HttpResponse],
-                                                               materializer: ActorMaterializer,
-                                                               um: Unmarshaller[ResponseEntity, T]): Unit = {
+  def haveEntity[T](description: String, futureHttpResponse: ⇒ Future[HttpResponse])(
+      check: T ⇒ Assertion)(implicit materializer: ActorMaterializer, um: Unmarshaller[ResponseEntity, T]): Unit = {
     description in {
       futureHttpResponse flatMap { resp ⇒
         checkEntity[T](resp)(check)

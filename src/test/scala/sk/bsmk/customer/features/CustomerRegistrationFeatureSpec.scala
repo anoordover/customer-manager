@@ -15,7 +15,7 @@ class CustomerRegistrationFeatureSpec extends ApiFeatureSpec {
   "The customer registration endpoint" when {
     "accessed with POST request and valid body" should {
 
-      implicit val futureResp: Future[HttpResponse] =
+      lazy val futureResponse: Future[HttpResponse] =
         Marshal(CustomerRegistrationRequest("some@email.com")).to[RequestEntity].flatMap { entity ⇒
           val request = HttpRequest(
             method = HttpMethods.POST,
@@ -25,8 +25,9 @@ class CustomerRegistrationFeatureSpec extends ApiFeatureSpec {
           Http().singleRequest(request)
         }
 
-      haveStatusOk
-//      shouldHaveContentType(ContentTypes.`application/json`)
+      haveStatusOk(futureResponse)
+
+      //      shouldHaveContentType(ContentTypes.`application/json`)
 
     }
   }

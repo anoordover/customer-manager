@@ -3,13 +3,13 @@ package sk.bsmk.customer.app
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.ServerBinding
+import akka.pattern.pipe
 import akka.stream.ActorMaterializer
 import sk.bsmk.customer.api.CustomerApi
 import sk.bsmk.customer.app.CustomerAppActor.{CustomerAppServerStarted, StartCustomerAppServer, StopCustomerAppServer}
 import sk.bsmk.customer.registration.CustomerRegistrator
 
-import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContextExecutor}
+import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}
 
 object CustomerAppActor {
@@ -30,27 +30,31 @@ class CustomerAppActor extends Actor with ActorLogging {
   implicit val materializer: ActorMaterializer            = ActorMaterializer()
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
-  var bindingOption: Option[ServerBinding] = None
+  var bindingOption: Option[Future[ServerBinding]] = None
 
   override def receive: PartialFunction[Any, Unit] = {
 
     case StartCustomerAppServer ⇒
+      log.debug("Starting server")
       val registrator = context.actorOf(CustomerRegistrator.props)
       val customerApi = new CustomerApi(registrator)
+      val future = Http()
+        .bindAndHandle(customerApi.routes, CustomerAppActor.Host, CustomerAppActor.Port)
 
-      log.debug("Starting server")
-      bindingOption = Some(
-        Await.result(Http().bindAndHandle(customerApi.routes, CustomerAppActor.Host, CustomerAppActor.Port), 10.seconds)
-      )
-      log.debug("Server started")
-      sender() ! CustomerAppServerStarted
+      bindingOption = Some(future)
+
+      future
+        .map(_ ⇒ CustomerAppServerStarted)
+        .pipeTo(sender())
+        .onComplete(_ ⇒ log.debug("Server started"))
 
     case StopCustomerAppServer ⇒
+      log.debug("Stopping server")
       bindingOption match {
-        case None ⇒ log.error("No future server binding found. Is was App started?")
+        case None ⇒ log.error("No future server binding found. Was server started?")
         case Some(binding) ⇒
           binding
-            .unbind()
+            .flatMap(_.unbind())
             .onComplete {
               case Success(_) ⇒ system.terminate()
               case Failure(e) ⇒

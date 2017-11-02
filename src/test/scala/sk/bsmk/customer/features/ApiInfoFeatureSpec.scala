@@ -13,11 +13,13 @@ class ApiInfoFeatureSpec extends ApiFeatureSpec {
 
   "The api endpoint" when {
     "accessed with GET request" should {
-      implicit val futureResp: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = s"$BaseUri/api"))
 
-      haveStatusOk
-      haveContentType(ContentTypes.`text/plain(UTF-8)`)
-      haveEntityEqualTo(CustomerApi.ApiInfo)
+      lazy val futureResponse: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = s"$BaseUri/api"))
+
+      haveStatusOk(futureResponse)
+      haveContentType(ContentTypes.`text/plain(UTF-8)`, futureResponse)
+
+      haveEntityEqualTo(CustomerApi.ApiInfo, futureResponse)
     }
   }
 

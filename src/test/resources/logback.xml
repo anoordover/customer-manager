@@ -5,7 +5,7 @@
     <!-- for color on windows -->
     <withJansi>true</withJansi>
     <encoder>
-      <pattern>%highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
+      <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{30}) - %msg %n</pattern>
     </encoder>
   </appender>
 

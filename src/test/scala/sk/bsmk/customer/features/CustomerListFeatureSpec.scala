@@ -13,13 +13,16 @@ class CustomerListFeatureSpec extends ApiFeatureSpec {
 
   "The customer list endpoint" when {
     "accessed with GET request" should {
-      implicit val futureResp: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = s"$BaseUri/api/customers"))
 
-      haveStatusOk
-      haveContentType(ContentTypes.`application/json`)
-      haveEntity[CustomerListResponse]("return two items") { entity ⇒
+      lazy val futureResp: Future[HttpResponse] =
+        Http().singleRequest(HttpRequest(uri = s"$BaseUri/api/customers"))
+
+      haveStatusOk(futureResp)
+      haveContentType(ContentTypes.`application/json`, futureResp)
+      haveEntity[CustomerListResponse]("return two items", futureResp) { entity ⇒
         entity.items should have size 2
       }
+
     }
   }
 
