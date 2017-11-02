@@ -5,6 +5,7 @@ import akka.event.Logging
 import akka.pattern.ask
 import akka.util.Timeout
 import sk.bsmk.customer.api.CustomerApi
+import sk.bsmk.customer.registration.CustomerRegistrator
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -15,9 +16,9 @@ object CustomerApp extends App {
   lazy val Host = "localhost"
   lazy val Port = 8080
 
-//  val system = ActorSystem("customer-manager")
-//  val log    = Logging.getLogger(system, this)
-//
+  val system = ActorSystem("customer-manager")
+  val log    = Logging.getLogger(system, this)
+
 //  val persistenceId = "1"
 //
 //  val customer = system.actorOf(CustomerActor.props(persistenceId))
@@ -38,6 +39,9 @@ object CustomerApp extends App {
 //
 //  Await.result(system.terminate(), 5 seconds)
 
-  CustomerApi.startServer(Host, Port)
+  val registrator = system.actorOf(CustomerRegistrator.props)
+  val customerApi = CustomerApi(registrator)
+
+  customerApi.startServer(Host, Port, system)
 
 }
