@@ -2,7 +2,7 @@ package sk.bsmk.customer
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{HttpResponse, ResponseEntity}
+import akka.http.scaladsl.model.{HttpResponse, ResponseEntity, StatusCodes}
 import akka.http.scaladsl.unmarshalling.{Unmarshal, Unmarshaller}
 import akka.stream.ActorMaterializer
 import org.scalatest.{Assertion, AsyncWordSpec, BeforeAndAfterAll, Matchers}
@@ -10,7 +10,12 @@ import sk.bsmk.customer.api.{CustomerApi, JsonSupport}
 
 import scala.concurrent.Future
 
-abstract class ApiFeatureSpec extends AsyncWordSpec with Matchers with JsonSupport with BeforeAndAfterAll {
+abstract class ApiFeatureSpec
+    extends AsyncWordSpec
+    with Matchers
+    with JsonSupport
+    with BeforeAndAfterAll
+    with ResponseBehaviors {
 
   implicit val system: ActorSystem             = ActorSystem()
   implicit val materializer: ActorMaterializer = ActorMaterializer()

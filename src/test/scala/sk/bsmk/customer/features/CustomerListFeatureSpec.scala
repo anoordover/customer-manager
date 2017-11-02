@@ -1,12 +1,20 @@
 package sk.bsmk.customer.features
 
-import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.HttpRequest
 import sk.bsmk.customer.ApiFeatureSpec
-import sk.bsmk.customer.api.CustomerListResponse
 
 class CustomerListFeatureSpec extends ApiFeatureSpec {
 
-//  "The customers resource" should {
+  "The customer list endpoint" when {
+    "accessed with GET request" should {
+      val futureResp = Http().singleRequest(HttpRequest(uri = s"$BaseUri/api/customers"))
+
+      shouldReturnOk(futureResp)
+
+    }
+  }
+  //  "The customers resource" should {
 //    "return list of customers for GET requests" in {
 //      Get("/api/customers") ~> route ~> check {
 //        status shouldEqual StatusCodes.OK

@@ -12,11 +12,7 @@ class ApiInfoFeatureSpec extends ApiFeatureSpec {
     "accessed with GET request" should {
       val futureResp = Http().singleRequest(HttpRequest(uri = s"$BaseUri/api"))
 
-      "return OK" in {
-        futureResp map { resp ⇒
-          resp.status shouldEqual StatusCodes.OK
-        }
-      }
+      shouldReturnOk(futureResp)
 
       s"return '${ContentTypes.`text/plain(UTF-8)`}'" in {
         futureResp map { resp ⇒
