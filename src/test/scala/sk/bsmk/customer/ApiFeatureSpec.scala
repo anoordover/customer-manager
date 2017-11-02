@@ -1,11 +1,11 @@
 package sk.bsmk.customer
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import org.scalatest.{AsyncWordSpec, BeforeAndAfterAll, Matchers}
-import sk.bsmk.customer.api.{CustomerApi, JsonSupport}
-import sk.bsmk.customer.registration.CustomerRegistrator
+import sk.bsmk.customer.api.JsonSupport
+import sk.bsmk.customer.app.CustomerAppActor
+import sk.bsmk.customer.app.CustomerAppActor.StopCustomerApp
 
 abstract class ApiFeatureSpec
     extends AsyncWordSpec
@@ -17,13 +17,14 @@ abstract class ApiFeatureSpec
   implicit val system: ActorSystem             = ActorSystem()
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
-  val registrator = system.actorOf(CustomerRegistrator.props)
-  val customerApi = CustomerApi(registrator)
+  private val customerApp = system.actorOf(CustomerAppActor.props)
 
-  val BaseUri = s"http://${CustomerApp.Host}:${CustomerApp.Port}"
+  val BaseUri = s"http://${CustomerAppActor.Host}:${CustomerAppActor.Port}"
 
-  override protected def beforeAll(): Unit = {
-    Http().bindAndHandle(customerApi.routes, CustomerApp.Host, CustomerApp.Port)
+  override protected def beforeAll(): Unit = {}
+
+  override protected def afterAll(): Unit = {
+    customerApp ! StopCustomerApp
   }
 
 }
