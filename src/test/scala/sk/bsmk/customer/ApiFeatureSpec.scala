@@ -2,10 +2,13 @@ package sk.bsmk.customer
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.model.{HttpResponse, ResponseEntity}
+import akka.http.scaladsl.unmarshalling.{Unmarshal, Unmarshaller}
 import akka.stream.ActorMaterializer
-import org.scalatest.{AsyncWordSpec, BeforeAndAfterAll, Matchers}
+import org.scalatest.{Assertion, AsyncWordSpec, BeforeAndAfterAll, Matchers}
 import sk.bsmk.customer.api.{CustomerApi, JsonSupport}
+
+import scala.concurrent.Future
 
 abstract class ApiFeatureSpec extends AsyncWordSpec with Matchers with JsonSupport with BeforeAndAfterAll {
 
@@ -14,11 +17,14 @@ abstract class ApiFeatureSpec extends AsyncWordSpec with Matchers with JsonSuppo
 
   val BaseUri = s"http://${CustomerApp.Host}:${CustomerApp.Port}"
 
-  protected val route: Route = CustomerApi.routes
-
   override protected def beforeAll(): Unit = {
-    Http().bindAndHandle(route, CustomerApp.Host, CustomerApp.Port)
+    Http().bindAndHandle(CustomerApi.routes, CustomerApp.Host, CustomerApp.Port)
   }
 
-  override protected def afterAll(): Unit = {}
+  protected def checkEntity[T](httpResponse: HttpResponse)(check: T ⇒ Assertion)(
+      implicit um: Unmarshaller[ResponseEntity, T]): Future[Assertion] = {
+    val unmarshaledF: Future[T] = Unmarshal(httpResponse.entity).to[T]
+    unmarshaledF flatMap (a ⇒ check(a))
+  }
+
 }
