@@ -1,30 +1,51 @@
 package sk.bsmk.customer.repository
 
 import java.util.UUID
-import javax.sql.DataSource
+import java.util.concurrent.Executors
 
 import org.jooq._
-import org.jooq.impl._
-import org.jooq.impl.DSL._
-import org.jooq.scalaextensions.Conversions._
-
-import sk.bsmk.customer.Customer
+import sk.bsmk.customer.detail.CustomerDetail
 import sk.bsmk.customer.persistence.model.Tables._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService, Future}
+import scala.compat.java8.OptionConverters._
 
 class CustomerRepository(
     dsl: DSLContext
 ) {
 
-  def find(uuid: UUID): Future[Customer] = {
+  implicit val ec: ExecutionContextExecutorService =
+    ExecutionContext.fromExecutorService(Executors.newCachedThreadPool())
 
-    dsl.fetchAsync(CUSTOMERS, CUSTOMERS.UUID.eq(uuid))
+  def insert(customerDetail: CustomerDetail): Future[Int] = {
+    Future {
+      dsl
+        .insertInto(CUSTOMERS)
+        .set(CUSTOMERS.UUID, customerDetail.uuid)
+        .set(CUSTOMERS.EMAIL, customerDetail.email)
+        .execute()
+    }
+  }
 
+  def update(customerDetail: CustomerDetail): Future[Int] = {
+    Future {
+      dsl
+        .update(CUSTOMERS)
+        .set(CUSTOMERS.EMAIL, customerDetail.email)
+        .where(CUSTOMERS.UUID.eq(customerDetail.uuid))
+        .execute()
+    }
+  }
 
-
-
-
+  def find(uuid: UUID): Future[Option[CustomerDetail]] = {
+    Future {
+      dsl
+        .selectFrom(CUSTOMERS)
+        .where(CUSTOMERS.UUID.eq(uuid))
+        .fetchOptional()
+        .asScala
+        .map(record ⇒ CustomerDetail(record.getUuid, record.getEmail))
+    }
   }
 
 }

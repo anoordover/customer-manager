@@ -68,7 +68,6 @@ dependencies {
   compile("com.github.dnvriend:akka-persistence-jdbc_$scalaVersion:3.0.1")
   compile(h2Dependency)
   compile("org.jooq:jooq")
-  compile("org.jooq:jooq-scala_$scalaVersion")
 
   // testing
   testCompile("org.scalatest:scalatest_$scalaVersion:3.0.4")
@@ -112,7 +111,7 @@ jooq {
       generate {
         relations = false
         deprecated = false
-        records = false
+        records = true
         immutablePojos = false
         fluentSetters = false
         javaTimeTypes = true
