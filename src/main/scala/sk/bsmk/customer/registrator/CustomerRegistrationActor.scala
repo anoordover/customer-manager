@@ -1,4 +1,4 @@
-package sk.bsmk.customer.registration
+package sk.bsmk.customer.registrator
 
 import akka.actor.ActorLogging
 import akka.persistence.PersistentActor

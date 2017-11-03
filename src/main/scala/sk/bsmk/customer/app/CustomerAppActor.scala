@@ -7,7 +7,7 @@ import akka.pattern.pipe
 import akka.stream.ActorMaterializer
 import sk.bsmk.customer.api.CustomerApi
 import sk.bsmk.customer.app.CustomerAppActor.{CustomerAppServerStarted, StartCustomerAppServer, StopCustomerAppServer}
-import sk.bsmk.customer.registration.CustomerRegistrator
+import sk.bsmk.customer.registrator.CustomerRegistrator
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}

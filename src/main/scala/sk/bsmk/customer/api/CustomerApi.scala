@@ -4,7 +4,7 @@ import java.util.UUID
 
 import akka.actor.ActorRef
 import akka.http.scaladsl.server.{HttpApp, Route}
-import sk.bsmk.customer.registration.RegisterCustomer
+import sk.bsmk.customer.registrator.RegisterCustomer
 
 object CustomerApi {
 

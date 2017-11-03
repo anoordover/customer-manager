@@ -1,3 +1,3 @@
-package sk.bsmk.customer.registration
+package sk.bsmk.customer.registrator
 
 final case class RegisterCustomer(email: String)

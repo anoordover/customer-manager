@@ -1,4 +1,4 @@
-package sk.bsmk.customer.registration
+package sk.bsmk.customer.registrator
 
 trait CustomerPersistenceIdGenerator {
 
