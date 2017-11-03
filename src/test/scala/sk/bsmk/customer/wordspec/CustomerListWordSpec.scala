@@ -1,15 +1,14 @@
-package sk.bsmk.customer.features
+package sk.bsmk.customer.wordspec
 
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{ContentTypes, HttpRequest, HttpResponse}
 import org.scalatest.DoNotDiscover
-import sk.bsmk.customer.ApiFeatureSpec
 import sk.bsmk.customer.api.CustomerListResponse
 
 import scala.concurrent.Future
 
 @DoNotDiscover
-class CustomerListFeatureSpec extends ApiFeatureSpec {
+class CustomerListWordSpec extends ApiWordSpec {
 
   "The customer list endpoint" when {
     "accessed with GET request" should {

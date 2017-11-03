@@ -1,16 +1,15 @@
-package sk.bsmk.customer.features
+package sk.bsmk.customer.wordspec
 
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model._
 import org.scalatest.DoNotDiscover
-import sk.bsmk.customer.ApiFeatureSpec
 import sk.bsmk.customer.api.CustomerRegistrationRequest
 
 import scala.concurrent.Future
 
 @DoNotDiscover
-class CustomerRegistrationFeatureSpec extends ApiFeatureSpec {
+class CustomerRegistrationWordSpec extends ApiWordSpec {
 
   "The customer registration endpoint" when {
     "accessed with POST request and valid body" should {
