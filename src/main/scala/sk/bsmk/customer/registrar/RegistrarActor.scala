@@ -1,13 +1,13 @@
-package sk.bsmk.customer.registrator
+package sk.bsmk.customer.registrar
 
 import akka.actor.{Actor, ActorLogging, Props}
 import sk.bsmk.customer.{CustomerActor, RegisterCustomer}
 
-object RegistratorActor {
-  def props: Props = Props(new RegistratorActor(CustomerPersistenceUuidGenerator))
+object RegistrarActor {
+  def props: Props = Props(new RegistrarActor(CustomerPersistenceUuidGenerator))
 }
 
-class RegistratorActor(persistenceIdGenerator: CustomerPersistenceIdGenerator) extends Actor with ActorLogging {
+class RegistrarActor(persistenceIdGenerator: CustomerPersistenceIdGenerator) extends Actor with ActorLogging {
 
   override def receive: PartialFunction[Any, Unit] = {
     case command: RegisterCustomer ⇒
@@ -16,6 +16,7 @@ class RegistratorActor(persistenceIdGenerator: CustomerPersistenceIdGenerator) e
       val newCustomer = context.actorOf(CustomerActor.props(persistenceId))
 
       newCustomer ! command
+
   }
 
 }

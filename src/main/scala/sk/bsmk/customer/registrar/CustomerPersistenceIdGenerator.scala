@@ -1,4 +1,4 @@
-package sk.bsmk.customer.registrator
+package sk.bsmk.customer.registrar
 
 import java.util.UUID
 
