@@ -2,6 +2,18 @@ package sk.bsmk.customer
 
 import akka.actor.{ActorLogging, Props}
 import akka.persistence.{PersistentActor, SnapshotOffer}
+import sk.bsmk.customer.CustomerActor.{AddVoucher, GetState, Register}
+
+object CustomerActor {
+
+  final case class Register(email: String)
+  final case class AddVoucher(voucherId: String)
+
+  case object GetState
+
+  def props(persistenceId: String): Props = Props(new CustomerActor(persistenceId))
+
+}
 
 class CustomerActor(val persistenceId: String) extends PersistentActor with ActorLogging {
 
@@ -20,13 +32,14 @@ class CustomerActor(val persistenceId: String) extends PersistentActor with Acto
   }
 
   override def receiveRecover: PartialFunction[Any, Unit] = {
+    case event: CustomerRegistered            ⇒ updateState(event)
     case event: VoucherAdded                  ⇒ updateState(event)
-    case SnapshotOffer(_, snapshot: Customer) => state = Option(snapshot)
+    case SnapshotOffer(_, snapshot: Customer) ⇒ state = Option(snapshot)
   }
 
   override def receiveCommand: PartialFunction[Any, Unit] = {
 
-    case command @ RegisterCustomer(email) ⇒
+    case command @ Register(email) ⇒
       log.info("Registering customer with id {} with {}", persistenceId, command)
       persist(CustomerRegistered(email)) { event ⇒
         updateState(event)
@@ -47,8 +60,6 @@ class CustomerActor(val persistenceId: String) extends PersistentActor with Acto
 
 }
 
-object CustomerActor {
-
-  def props(persistenceId: String): Props = Props(new CustomerActor(persistenceId))
-
-}
+sealed trait CustomerEvent
+final case class CustomerRegistered(email: String) extends CustomerEvent
+final case class VoucherAdded(voucherId: String)   extends CustomerEvent

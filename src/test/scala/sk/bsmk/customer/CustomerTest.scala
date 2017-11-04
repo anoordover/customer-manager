@@ -4,6 +4,7 @@ import akka.actor.{ActorRef, ActorSystem}
 import org.scalatest.{Matchers, WordSpec}
 import sk.bsmk.customer.mailman.MailmanActor
 import sk.bsmk.customer.registrar.RegistrarActor
+import sk.bsmk.customer.registrar.RegistrarActor.RegisterCustomer
 
 class CustomerTest extends WordSpec with Matchers {
 
@@ -18,7 +19,7 @@ class CustomerTest extends WordSpec with Matchers {
 
       "register new customer" in {
 
-        registrar ! RegisterCustomer("some@email.com")
+        registrar ! RegisterCustomer(RegistrationData("some@email.com"))
 
         Thread.sleep(1000)
 
