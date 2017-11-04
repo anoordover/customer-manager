@@ -1,4 +1,4 @@
-package sk.bsmk.customer.wordspec
+package sk.bsmk.customer.wordspecs
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer

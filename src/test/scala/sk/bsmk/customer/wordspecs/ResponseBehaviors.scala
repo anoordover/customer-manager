@@ -1,4 +1,4 @@
-package sk.bsmk.customer.wordspec
+package sk.bsmk.customer.wordspecs
 
 import akka.http.scaladsl.model.headers.`Content-Type`
 import akka.http.scaladsl.model.{ContentType, HttpResponse, ResponseEntity, StatusCodes}

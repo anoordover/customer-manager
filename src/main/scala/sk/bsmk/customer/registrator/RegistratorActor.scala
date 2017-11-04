@@ -2,11 +2,11 @@ package sk.bsmk.customer.registrator
 
 import akka.actor.{Actor, ActorLogging, Props}
 
-object CustomerRegistrator {
-  def props: Props = Props(new CustomerRegistrator(CustomerPersistenceUuidGenerator))
+object RegistratorActor {
+  def props: Props = Props(new RegistratorActor(CustomerPersistenceUuidGenerator))
 }
 
-class CustomerRegistrator(persistenceIdGenerator: CustomerPersistenceIdGenerator) extends Actor with ActorLogging {
+class RegistratorActor(persistenceIdGenerator: CustomerPersistenceIdGenerator) extends Actor with ActorLogging {
 
   override def receive: PartialFunction[Any, Unit] = {
     case RegisterCustomer(email) ⇒

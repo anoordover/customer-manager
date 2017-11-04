@@ -7,7 +7,7 @@ import akka.pattern.pipe
 import akka.stream.ActorMaterializer
 import sk.bsmk.customer.api.CustomerApi
 import sk.bsmk.customer.app.CustomerAppActor.{CustomerAppServerStarted, StartCustomerAppServer, StopCustomerAppServer}
-import sk.bsmk.customer.registrator.CustomerRegistrator
+import sk.bsmk.customer.registrator.RegistratorActor
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}
@@ -36,7 +36,7 @@ class CustomerAppActor extends Actor with ActorLogging {
 
     case StartCustomerAppServer ⇒
       log.debug("Starting server")
-      val registrator = context.actorOf(CustomerRegistrator.props)
+      val registrator = context.actorOf(RegistratorActor.props)
       val customerApi = new CustomerApi(registrator)
       val future = Http()
         .bindAndHandle(customerApi.routes, CustomerAppActor.Host, CustomerAppActor.Port)
