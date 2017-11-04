@@ -1,21 +1,35 @@
 package sk.bsmk.customer.registrar
 
-import akka.actor.{Actor, ActorLogging, Props}
-import sk.bsmk.customer.{CustomerActor, RegisterCustomer}
+import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import sk.bsmk.customer.mailman.MailmanActor.RegistrationSuccessful
+import sk.bsmk.customer.registrar.RegistrarActor.RegisterCustomer
+import sk.bsmk.customer.{CustomerActor, RegistrationData}
 
 object RegistrarActor {
-  def props: Props = Props(new RegistrarActor(CustomerPersistenceUuidGenerator))
+
+  final case class RegisterCustomer(data: RegistrationData)
+
+  def props(mailman: ActorRef): Props = Props(new RegistrarActor(CustomerPersistenceUuidGenerator, mailman))
+
 }
 
-class RegistrarActor(persistenceIdGenerator: CustomerPersistenceIdGenerator) extends Actor with ActorLogging {
+class RegistrarActor(
+    persistenceIdGenerator: CustomerPersistenceIdGenerator,
+    mailman: ActorRef
+) extends Actor
+    with ActorLogging {
 
   override def receive: PartialFunction[Any, Unit] = {
-    case command: RegisterCustomer ⇒
+    case RegisterCustomer(data) ⇒
+      log.info("Registering {}", data)
+
       val persistenceId = persistenceIdGenerator.generate()
-      log.info("Generated '{}' for {}", persistenceId, command)
+      log.debug("Generated '{}' for {}", persistenceId, data)
       val newCustomer = context.actorOf(CustomerActor.props(persistenceId))
 
-      newCustomer ! command
+      newCustomer ! "TODO"
+
+      mailman ! RegistrationSuccessful(data.email)
 
   }
 

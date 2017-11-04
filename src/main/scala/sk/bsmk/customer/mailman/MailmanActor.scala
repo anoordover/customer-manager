@@ -1,8 +1,13 @@
 package sk.bsmk.customer.mailman
 
 import akka.actor.{Actor, ActorLogging, Props}
+import sk.bsmk.customer.Email
+import sk.bsmk.customer.mailman.MailmanActor.{EmailAlreadyExists, RegistrationSuccessful}
 
 object MailmanActor {
+
+  final case class EmailAlreadyExists(email: Email)
+  final case class RegistrationSuccessful(email: Email)
 
   def props: Props = Props[MailmanActor]
 

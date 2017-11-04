@@ -3,21 +3,22 @@
 title Customer registration
 
 actor Customer as c
+actor Representative as re
 actor Mailman as m
 actor Registrar as r
 actor Bookkeeper as b
 
-c -->> r: register me with this email
-r --> b: do we have customer with this email?
+c -->> re: provides registration data
+re -->> b: register this customer
+b -->> b: checks if email exists
 alt email exists
-b --> r: answers yes
-r -->> m: send mail to this address that we already have it
-else new email
-b --> r: answers no
+b -->> m: send mail to this address that we already have it
+else non-existing email
+b --> r: register new account with this data
 r -->> r: generates new internal id
 r -->> r: registers customer
-r -->> b: we have new customer with id and email
-r -->> m: send mail to this adderss that he can use our services
+r -->> m: send mail to this address that he can use our services
 end
 m -->> c: sends mail
+
 @enduml

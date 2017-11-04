@@ -1,26 +1,27 @@
 package sk.bsmk.customer.bookkeeper
 
-import akka.actor.{Actor, ActorLogging, Props}
-import akka.persistence.jdbc.query.scaladsl.JdbcReadJournal
-import akka.persistence.query.PersistenceQuery
+import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import sk.bsmk.customer.RegistrationData
+import sk.bsmk.customer.bookkeeper.BookkeeperActor.CheckMailAndRegisterOrDecline
 import sk.bsmk.customer.repository.CustomerRepository
 
 object BookkeeperActor {
 
-  def props(customerRepository: CustomerRepository) = Props(new BookkeeperActor(customerRepository))
+  final case class CheckMailAndRegisterOrDecline(data: RegistrationData)
+
+  def props(repository: CustomerRepository, registrar: ActorRef) = Props(new BookkeeperActor(repository, registrar))
 
 }
 
 class BookkeeperActor(
-    customerRepository: CustomerRepository
+    repository: CustomerRepository,
+    registrar: ActorRef
 ) extends Actor
     with ActorLogging {
 
-  val readJournal: JdbcReadJournal =
-    PersistenceQuery(context.system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)
-
   override def receive = {
-    ???
+    case CheckMailAndRegisterOrDecline(data) ⇒
+      ???
   }
 
 }
