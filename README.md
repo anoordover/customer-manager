@@ -2,7 +2,6 @@
 Sample project with akka-persistence as a EventSourcing tool.
 
 TODO:
-1. http layer
 2. some tests
 3. query side
 4. creation vs update: can FSM be helpful?

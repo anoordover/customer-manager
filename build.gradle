@@ -44,18 +44,13 @@ dependencies {
   // basic
   compile("org.scala-lang:scala-library:$scalaVersion.4")
   compile("com.typesafe.akka:akka-actor_$scalaVersion:$akkaVersion")
-  compile("com.softwaremill.quicklens:quicklens_$scalaVersion:1.4.11")
 
   // serialization
   compile("com.twitter:chill-akka_$scalaVersion:0.9.2")
 
   // cluster and sharding
-  compile("com.typesafe.akka:akka-cluster_$scalaVersion:$akkaVersion")
-  compile("com.typesafe.akka:akka-cluster-sharding_$scalaVersion:$akkaVersion")
-
-  // http
-  compile("com.typesafe.akka:akka-http_$scalaVersion:$akkaHttpVersion")
-  compile("com.typesafe.akka:akka-http-spray-json_$scalaVersion:$akkaHttpVersion")
+//  compile("com.typesafe.akka:akka-cluster_$scalaVersion:$akkaVersion")
+//  compile("com.typesafe.akka:akka-cluster-sharding_$scalaVersion:$akkaVersion")
 
   // logging
   compile("com.typesafe.akka:akka-slf4j_$scalaVersion:$akkaVersion")
@@ -71,8 +66,7 @@ dependencies {
 
   // testing
   testCompile("org.scalatest:scalatest_$scalaVersion:3.0.4")
-  // testing with akka-http client is not very user friendly
-  testCompile("io.rest-assured:scala-support:3.0.5")
+  // for gradle scalatest plugin
   testRuntime 'org.pegdown:pegdown:1.6.0'
 
 }
