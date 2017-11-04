@@ -1,7 +1,7 @@
 package sk.bsmk.customer.registrar
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
-import sk.bsmk.customer.mailman.MailmanActor.RegistrationSuccessful
+import sk.bsmk.customer.CustomerActor.Register
 import sk.bsmk.customer.registrar.RegistrarActor.RegisterCustomer
 import sk.bsmk.customer.{CustomerActor, RegistrationData}
 
@@ -27,9 +27,7 @@ class RegistrarActor(
       log.debug("Generated '{}' for {}", persistenceId, data)
       val newCustomer = context.actorOf(CustomerActor.props(persistenceId))
 
-      newCustomer ! "TODO"
-
-      mailman ! RegistrationSuccessful(data.email)
+      newCustomer ! Register(data, mailman)
 
   }
 

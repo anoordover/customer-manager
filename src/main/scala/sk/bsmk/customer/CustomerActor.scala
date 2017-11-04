@@ -1,12 +1,13 @@
 package sk.bsmk.customer
 
-import akka.actor.{ActorLogging, Props}
+import akka.actor.{ActorLogging, ActorRef, Props}
 import akka.persistence.{PersistentActor, SnapshotOffer}
 import sk.bsmk.customer.CustomerActor.{AddVoucher, GetState, Register}
+import sk.bsmk.customer.mailman.MailmanActor.RegistrationSuccessful
 
 object CustomerActor {
 
-  final case class Register(email: String)
+  final case class Register(data: RegistrationData, mailman: ActorRef)
   final case class AddVoucher(voucherId: String)
 
   case object GetState
@@ -39,18 +40,17 @@ class CustomerActor(val persistenceId: String) extends PersistentActor with Acto
 
   override def receiveCommand: PartialFunction[Any, Unit] = {
 
-    case command @ Register(email) ⇒
+    case command @ Register(data, mailman) ⇒
       log.info("Registering customer with id {} with {}", persistenceId, command)
-      persist(CustomerRegistered(email)) { event ⇒
+      persist(CustomerRegistered(data.email)) { event ⇒
         updateState(event)
-        context.system.eventStream.publish(event)
+        mailman ! RegistrationSuccessful(data.email)
       }
 
     case command @ AddVoucher(voucherId) ⇒
       log.info("Applying {} to customer with {}", command, persistenceId)
       persist(VoucherAdded(voucherId)) { event ⇒
         updateState(event)
-        context.system.eventStream.publish(event)
         if (lastSequenceNr % snapShotInterval == 0 && lastSequenceNr != 0)
           saveSnapshot(state)
       }
