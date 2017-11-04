@@ -24,10 +24,10 @@ class MailmanActor(
   override def receive: PartialFunction[Any, Unit] = {
     case EmailAlreadyExists(email) ⇒
       log.info("Sending email to {} about already existing email", email)
-      messagingService.sendMessage(email, MailmanActor.EmailExists)
+      messagingService.sendMessage(MessagingServiceData(email, MailmanActor.EmailExists))
     case RegistrationSuccessful(email) ⇒
       log.info("Sending email to {} that customer was successfully registered", email)
-      messagingService.sendMessage(email, MailmanActor.Registered)
+      messagingService.sendMessage(MessagingServiceData(email, MailmanActor.Registered))
   }
 
 }

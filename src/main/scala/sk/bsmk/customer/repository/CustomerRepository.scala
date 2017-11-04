@@ -1,9 +1,9 @@
 package sk.bsmk.customer.repository
 
-import java.util.UUID
 import java.util.concurrent.Executors
 
 import org.jooq._
+import sk.bsmk.customer.Email
 import sk.bsmk.customer.detail.CustomerDetail
 import sk.bsmk.customer.persistence.model.Tables._
 
@@ -37,11 +37,11 @@ class CustomerRepository(
     }
   }
 
-  def find(uuid: UUID): Future[Option[CustomerDetail]] = {
+  def find(email: Email): Future[Option[CustomerDetail]] = {
     Future {
       dsl
         .selectFrom(CUSTOMERS)
-        .where(CUSTOMERS.UUID.eq(uuid))
+        .where(CUSTOMERS.EMAIL.eq(email))
         .fetchOptional()
         .asScala
         .map(record ⇒ CustomerDetail(record.getUuid, record.getEmail))
