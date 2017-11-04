@@ -9,4 +9,3 @@ class CustomerAppWordSpecSuite
       new CustomerListWordSpec,
       new CustomerRegistrationWordSpec
     )
-    with RunningApp {}
