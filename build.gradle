@@ -48,9 +48,9 @@ dependencies {
   // serialization
   compile("com.twitter:chill-akka_$scalaVersion:0.9.2")
 
-  // cluster and sharding
-//  compile("com.typesafe.akka:akka-cluster_$scalaVersion:$akkaVersion")
-//  compile("com.typesafe.akka:akka-cluster-sharding_$scalaVersion:$akkaVersion")
+  // cluster and sharding for protobuf dependency
+  compile("com.typesafe.akka:akka-cluster_$scalaVersion:$akkaVersion")
+  compile("com.typesafe.akka:akka-cluster-sharding_$scalaVersion:$akkaVersion")
 
   // logging
   compile("com.typesafe.akka:akka-slf4j_$scalaVersion:$akkaVersion")
