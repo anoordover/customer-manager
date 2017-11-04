@@ -23,25 +23,25 @@ class CustomerRepository(
   implicit val ec: ExecutionContextExecutorService =
     ExecutionContext.fromExecutorService(Executors.newCachedThreadPool())
 
-  def insert(customerDetail: CustomerDetail): Future[Int] = {
-    Future {
-      dsl
-        .insertInto(CUSTOMERS)
-        .set(CUSTOMERS.UUID, customerDetail.uuid)
-        .set(CUSTOMERS.EMAIL, customerDetail.email)
-        .execute()
-    }
-  }
+//  def insert(customerDetail: CustomerDetail): Future[Int] = {
+//    Future {
+//      dsl
+//        .insertInto(CUSTOMERS)
+//        .set(CUSTOMERS.UUID, customerDetail.uuid)
+//        .set(CUSTOMERS.EMAIL, customerDetail.email)
+//        .execute()
+//    }
+//  }
 
-  def update(customerDetail: CustomerDetail): Future[Int] = {
-    Future {
-      dsl
-        .update(CUSTOMERS)
-        .set(CUSTOMERS.EMAIL, customerDetail.email)
-        .where(CUSTOMERS.UUID.eq(customerDetail.uuid))
-        .execute()
-    }
-  }
+//  def update(customerDetail: CustomerDetail): Future[Int] = {
+//    Future {
+//      dsl
+//        .update(CUSTOMERS)
+//        .set(CUSTOMERS.EMAIL, customerDetail.email)
+//        .where(CUSTOMERS.UUID.eq(customerDetail.uuid))
+//        .execute()
+//    }
+//  }
 
   def find(email: Email): Future[Option[CustomerDetail]] = {
     Future {
@@ -50,7 +50,7 @@ class CustomerRepository(
         .where(CUSTOMERS.EMAIL.eq(email))
         .fetchOptional()
         .asScala
-        .map(record ⇒ CustomerDetail(record.getUuid, record.getEmail))
+        .map(record ⇒ CustomerDetail(record.getEmail, 0))
     }
   }
 

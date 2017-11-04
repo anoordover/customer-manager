@@ -4,4 +4,4 @@ import java.util.UUID
 
 import sk.bsmk.customer.Email
 
-final case class CustomerDetail(uuid: UUID, email: Email)
+final case class CustomerDetail(email: Email, points: Int)
