@@ -29,11 +29,16 @@ class BookkeeperActor(
 
   override def receive: PartialFunction[Any, Unit] = {
     case CheckMailAndRegisterOrDecline(data) ⇒
+      log.info("Checking existence of {}", data.email)
       val future = repository.find(data.email)
       future.onComplete {
-        case Failure(e)       ⇒ log.error("Problem when checking customer existence", e)
-        case Success(None)    ⇒ registrar ! RegisterCustomer(data)
-        case Success(Some(_)) ⇒ mailman ! EmailAlreadyExists(data.email)
+        case Failure(e) ⇒ log.error("Problem when checking customer existence", e)
+        case Success(None) ⇒
+          log.debug("No existing record found for {}", data.email)
+          registrar ! RegisterCustomer(data)
+        case Success(Some(_)) ⇒
+          log.debug("Existing record found for {}", data.email)
+          mailman ! EmailAlreadyExists(data.email)
       }
   }
 

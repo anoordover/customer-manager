@@ -10,6 +10,12 @@ import sk.bsmk.customer.persistence.model.Tables._
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService, Future}
 import scala.compat.java8.OptionConverters._
 
+object CustomerRepository {
+
+  def apply(dsl: DSLContext) = new CustomerRepository(dsl)
+
+}
+
 class CustomerRepository(
     dsl: DSLContext
 ) {
