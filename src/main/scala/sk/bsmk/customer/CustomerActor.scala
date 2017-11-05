@@ -2,15 +2,21 @@ package sk.bsmk.customer
 
 import akka.actor.{ActorLogging, ActorRef, Props}
 import akka.persistence.{PersistentActor, SnapshotOffer}
-import sk.bsmk.customer.CustomerActor.{AddVoucher, GetState, Register}
+import sk.bsmk.customer.CustomerActor._
 import sk.bsmk.customer.mailman.MailmanActor.RegistrationSuccessful
 
 object CustomerActor {
+
+  val Tag = "Customer"
 
   final case class Register(data: RegistrationData, mailman: ActorRef)
   final case class AddVoucher(voucherId: String)
 
   case object GetState
+
+  sealed trait CustomerEvent
+  final case class CustomerRegistered(email: String) extends CustomerEvent
+  final case class VoucherAdded(voucherId: String)   extends CustomerEvent
 
   def props(persistenceId: String): Props = Props(new CustomerActor(persistenceId))
 
@@ -59,7 +65,3 @@ class CustomerActor(val persistenceId: String) extends PersistentActor with Acto
   }
 
 }
-
-sealed trait CustomerEvent
-final case class CustomerRegistered(email: String) extends CustomerEvent
-final case class VoucherAdded(voucherId: String)   extends CustomerEvent

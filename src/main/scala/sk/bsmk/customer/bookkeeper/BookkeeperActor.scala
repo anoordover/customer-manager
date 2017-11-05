@@ -1,31 +1,59 @@
 package sk.bsmk.customer.bookkeeper
 
+import java.util.UUID
+
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
-import sk.bsmk.customer.{Email, RegistrationData}
+import akka.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import akka.persistence.query.{EventEnvelope, Offset}
+import akka.stream.Materializer
+import akka.stream.javadsl.Sink
+import sk.bsmk.customer.CustomerActor.CustomerRegistered
 import sk.bsmk.customer.bookkeeper.BookkeeperActor.{CheckMailAndRegisterOrDecline, ProvideDetail}
 import sk.bsmk.customer.mailman.MailmanActor.{CustomerDetailResponse, EmailAlreadyExists, NoInformationFound}
 import sk.bsmk.customer.registrar.RegistrarActor.RegisterCustomer
 import sk.bsmk.customer.repository.CustomerRepository
+import sk.bsmk.customer.{CustomerActor, Email, RegistrationData}
 
 import scala.util.{Failure, Success}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object BookkeeperActor {
 
   final case class CheckMailAndRegisterOrDecline(data: RegistrationData)
   final case class ProvideDetail(email: Email)
 
-  def props(repository: CustomerRepository, registrar: ActorRef, mailman: ActorRef) =
-    Props(new BookkeeperActor(repository, registrar, mailman))
+  def props(repository: CustomerRepository, registrar: ActorRef, mailman: ActorRef, readJournal: JdbcReadJournal)(
+      implicit materializer: Materializer
+  ) =
+    Props(new BookkeeperActor(repository, registrar, mailman, readJournal))
 
 }
 
 class BookkeeperActor(
     repository: CustomerRepository,
     registrar: ActorRef,
-    mailman: ActorRef
+    mailman: ActorRef,
+    readJournal: JdbcReadJournal
+)(
+    implicit materializer: Materializer
 ) extends Actor
     with ActorLogging {
+
+  override def preStart(): Unit = {
+    readJournal
+      .eventsByTag(CustomerActor.Tag, Offset.noOffset)
+      .mapAsync(1) {
+        case EventEnvelope(_, persistenceId, sequenceNr, CustomerRegistered(email)) ⇒
+          log.info("inserting")
+          repository.insert(UUID.fromString(persistenceId), email)
+        case e ⇒
+          log.error("Something unexpected {}", e)
+          Future.successful("TODO")
+
+      }
+      .runWith(Sink.ignore)
+  }
 
   override def receive: PartialFunction[Any, Unit] = {
     case CheckMailAndRegisterOrDecline(data) ⇒

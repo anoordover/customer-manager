@@ -1,5 +1,6 @@
 package sk.bsmk.customer.repository
 
+import java.util.UUID
 import java.util.concurrent.Executors
 
 import org.jooq._
@@ -23,15 +24,15 @@ class CustomerRepository(
   implicit val ec: ExecutionContextExecutorService =
     ExecutionContext.fromExecutorService(Executors.newCachedThreadPool())
 
-//  def insert(customerDetail: CustomerDetail): Future[Int] = {
-//    Future {
-//      dsl
-//        .insertInto(CUSTOMERS)
-//        .set(CUSTOMERS.UUID, customerDetail.uuid)
-//        .set(CUSTOMERS.EMAIL, customerDetail.email)
-//        .execute()
-//    }
-//  }
+  def insert(uuid: UUID, email: Email): Future[Int] = {
+    Future {
+      dsl
+        .insertInto(CUSTOMERS)
+        .set(CUSTOMERS.UUID, uuid)
+        .set(CUSTOMERS.EMAIL, email)
+        .execute()
+    }
+  }
 
 //  def update(customerDetail: CustomerDetail): Future[Int] = {
 //    Future {
