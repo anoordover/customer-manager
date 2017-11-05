@@ -24,7 +24,7 @@ class CustomerTest extends WordSpec with Matchers with DbSupport with BeforeAndA
   protected val messagingService         = new MockMessagingService()
   protected val mailman: ActorRef        = system.actorOf(MailmanActor.props(messagingService))
   protected val registrar: ActorRef      = system.actorOf(RegistrarActor.props(mailman))
-  protected val bookkeeper: Bookkeeper   = Bookkeeper(repository, registrar, mailman, readJournal)
+  protected val bookkeeper: Bookkeeper   = Bookkeeper(customerRepository, registrar, mailman, readJournal)
   protected val representative: ActorRef = system.actorOf(Representative.props(bookkeeper))
 
   before {

@@ -1,0 +1,13 @@
+@startuml
+
+title Customer registration
+
+actor Customer as c
+actor Representative as re
+actor Mailman as m
+actor Registrar as r
+actor Bookkeeper as b
+
+
+
+@enduml

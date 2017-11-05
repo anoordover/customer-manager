@@ -12,8 +12,7 @@ import sk.bsmk.customer.CustomerActor.CustomerRegistered
 import sk.bsmk.customer.bookkeeper.Bookkeeper.{CheckMailAndRegisterOrDecline, ProvideDetail}
 import sk.bsmk.customer.mailman.MailmanActor.{CustomerDetailResponse, EmailAlreadyExists, NoInformationFound}
 import sk.bsmk.customer.registrar.RegistrarActor.RegisterCustomer
-import sk.bsmk.customer.repository.CustomerRepository
-import sk.bsmk.customer.{CustomerActor, Email, RegistrationData}
+import sk.bsmk.customer.{CustomerActor, CustomerRepository, Email, RegistrationData}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

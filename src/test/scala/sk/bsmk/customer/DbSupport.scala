@@ -1,9 +1,12 @@
 package sk.bsmk.customer
 
+import java.util.concurrent.Executors
+
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 import org.jooq.{DSLContext, SQLDialect}
 import org.jooq.impl.DSL
-import sk.bsmk.customer.repository.CustomerRepository
+
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService}
 
 trait DbSupport {
 
@@ -13,8 +16,11 @@ trait DbSupport {
 
   private val datasource = new HikariDataSource(hikariConfig)
 
+  implicit val ec: ExecutionContextExecutorService =
+    ExecutionContext.fromExecutorService(Executors.newCachedThreadPool())
+
   protected val dsl: DSLContext = DSL.using(datasource, SQLDialect.H2)
 
-  protected val repository = CustomerRepository(dsl)
+  protected val customerRepository = CustomerRepository(dsl)
 
 }

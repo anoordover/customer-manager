@@ -1,28 +1,24 @@
-package sk.bsmk.customer.repository
+package sk.bsmk.customer
 
 import java.util.UUID
 import java.util.concurrent.Executors
 
 import org.jooq._
-import sk.bsmk.customer.Email
 import sk.bsmk.customer.detail.CustomerDetail
 import sk.bsmk.customer.persistence.model.Tables._
 
-import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService, Future}
 import scala.compat.java8.OptionConverters._
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService, Future}
 
 object CustomerRepository {
 
-  def apply(dsl: DSLContext) = new CustomerRepository(dsl)
+  def apply(dsl: DSLContext)(implicit executionContext: ExecutionContext) = new CustomerRepository(dsl)
 
 }
 
 class CustomerRepository(
     dsl: DSLContext
-) {
-
-  implicit val ec: ExecutionContextExecutorService =
-    ExecutionContext.fromExecutorService(Executors.newCachedThreadPool())
+)(implicit executionContext: ExecutionContext) {
 
   def insert(uuid: UUID, email: Email): Future[Int] = {
     Future {
