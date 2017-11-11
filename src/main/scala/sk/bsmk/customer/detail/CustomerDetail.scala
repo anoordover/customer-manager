@@ -1,5 +1,11 @@
 package sk.bsmk.customer.detail
 
-import sk.bsmk.customer.Email
+import java.time.LocalDateTime
 
-final case class CustomerDetail(email: Email, points: Int)
+import sk.bsmk.customer.{Email, Username}
+
+final case class CustomerDetail(username: Username,
+                                email: Email,
+                                createdAt: LocalDateTime,
+                                updatedAt: LocalDateTime,
+                                points: Int)

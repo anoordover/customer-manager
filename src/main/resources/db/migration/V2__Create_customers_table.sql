@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS PUBLIC."customers";
 
 CREATE TABLE IF NOT EXISTS PUBLIC."customers" (
-  "uuid" UUID PRIMARY KEY,
+  "username" VARCHAR(255) PRIMARY KEY,
   "email" VARCHAR(255) NOT NULL,
   "created_at" TIMESTAMP NOT NULL,
   "updated_at" TIMESTAMP NOT NULL

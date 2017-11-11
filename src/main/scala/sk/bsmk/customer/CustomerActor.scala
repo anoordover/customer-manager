@@ -3,7 +3,7 @@ package sk.bsmk.customer
 import akka.actor.{ActorLogging, Props}
 import akka.persistence.{PersistentActor, SnapshotOffer}
 import sk.bsmk.customer.CustomerActor._
-import sk.bsmk.customer.registrar.{RegistrationResult, Stored}
+import sk.bsmk.customer.registrar.{RegistrationData, RegistrationResult, Stored}
 
 import scala.concurrent.Promise
 

@@ -1,7 +1,5 @@
 package sk.bsmk.customer.bookkeeper
 
-import java.util.UUID
-
 import akka.persistence.jdbc.query.scaladsl.JdbcReadJournal
 import akka.persistence.query.{EventEnvelope, Offset}
 import akka.stream.Materializer
@@ -9,8 +7,9 @@ import akka.stream.javadsl.Sink
 import com.typesafe.scalalogging.LazyLogging
 import sk.bsmk.customer.CustomerActor.CustomerRegistered
 import sk.bsmk.customer.bookkeeper.Bookkeeper.ProvideDetail
-import sk.bsmk.customer.detail.CustomerDetail
-import sk.bsmk.customer.{CustomerActor, CustomerRepository, Email, RegistrationData}
+import sk.bsmk.customer.detail.{CustomerDetail, CustomerPersistenceId}
+import sk.bsmk.customer.registrar.RegistrationData
+import sk.bsmk.customer.{CustomerActor, CustomerRepository, Email}
 
 import scala.concurrent.Future
 
@@ -37,7 +36,7 @@ class Bookkeeper(
     .mapAsync(1) {
       case EventEnvelope(_, persistenceId, _, CustomerRegistered(email)) ⇒
         logger.info("inserting")
-        repository.insert(UUID.fromString(persistenceId), email)
+        repository.insert(CustomerPersistenceId.asUsername(persistenceId), email)
       case e ⇒
         logger.error("Something unexpected {}", e)
         Future.successful("TODO")

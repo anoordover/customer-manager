@@ -5,9 +5,9 @@ import sk.bsmk.customer.bookkeeper.Bookkeeper
 import sk.bsmk.customer.bookkeeper.Bookkeeper.ProvideDetail
 import sk.bsmk.customer.detail.CustomerDetail
 import sk.bsmk.customer.registrar.Registrar.RegisterCustomer
-import sk.bsmk.customer.registrar.{Registrar, Stored}
+import sk.bsmk.customer.registrar.{Registrar, RegistrationData, Stored}
 import sk.bsmk.customer.representative.Representative.{DetailRequest, RegistrationRequest}
-import sk.bsmk.customer.{Email, RegistrationData}
+import sk.bsmk.customer.Email
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

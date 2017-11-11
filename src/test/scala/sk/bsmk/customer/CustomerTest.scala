@@ -7,7 +7,7 @@ import akka.stream.ActorMaterializer
 import org.scalatest.{AsyncWordSpec, BeforeAndAfter, Matchers}
 import sk.bsmk.customer.bookkeeper.Bookkeeper
 import sk.bsmk.customer.persistence.model.Tables
-import sk.bsmk.customer.registrar.Registrar
+import sk.bsmk.customer.registrar.{Registrar, RegistrationData}
 import sk.bsmk.customer.representative.Representative
 import sk.bsmk.customer.representative.Representative.RegistrationRequest
 
@@ -35,9 +35,10 @@ class CustomerTest extends AsyncWordSpec with Matchers with DbSupport with Befor
 
       "register new customer" in {
 
-        val email = "some@email.com"
+        val username = "some-user"
+        val email    = "some@email.com"
 
-        val data = RegistrationData(email)
+        val data = RegistrationData(username, email)
 
         representative
           .processRegistration(RegistrationRequest(data))
