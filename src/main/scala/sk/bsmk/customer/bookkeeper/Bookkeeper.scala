@@ -46,6 +46,7 @@ class Bookkeeper(
     .runWith(Sink.ignore)
 
   def provideDetail(query: ProvideDetail): Future[Option[CustomerDetail]] = {
+    Thread.sleep(1000)
     val email = query.email
     logger.info("Retrieving data for {}", email)
     repository.find(email)

@@ -1,5 +1,6 @@
 package sk.bsmk.customer
 
+import java.time.LocalDateTime
 import java.util.UUID
 import java.util.concurrent.Executors
 
@@ -26,6 +27,8 @@ class CustomerRepository(
         .insertInto(CUSTOMERS)
         .set(CUSTOMERS.UUID, uuid)
         .set(CUSTOMERS.EMAIL, email)
+        .set(CUSTOMERS.CREATED_AT, LocalDateTime.now())
+        .set(CUSTOMERS.UPDATED_AT, LocalDateTime.now())
         .execute()
     }
   }
