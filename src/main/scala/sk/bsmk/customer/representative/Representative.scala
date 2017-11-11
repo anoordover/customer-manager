@@ -23,7 +23,7 @@ object Representative {
 
 class Representative(registrar: Registrar, bookkeeper: Bookkeeper) extends LazyLogging {
 
-  def receiveRegistration(request: RegistrationRequest): Future[Option[CustomerDetail]] = {
+  def processRegistration(request: RegistrationRequest): Future[Option[CustomerDetail]] = {
 
     logger.info("Processing registration request {}", request)
     registrar
