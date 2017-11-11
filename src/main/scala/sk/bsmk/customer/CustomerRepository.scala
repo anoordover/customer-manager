@@ -19,14 +19,14 @@ class CustomerRepository(
     dsl: DSLContext
 )(implicit executionContext: ExecutionContext) {
 
-  def insert(username: Username, email: Email): Future[Int] = {
+  def insert(detail: CustomerDetail): Future[Int] = {
     Future {
       dsl
         .insertInto(CUSTOMERS)
-        .set(CUSTOMERS.USERNAME, username)
-        .set(CUSTOMERS.EMAIL, email)
-        .set(CUSTOMERS.CREATED_AT, LocalDateTime.now())
-        .set(CUSTOMERS.UPDATED_AT, LocalDateTime.now())
+        .set(CUSTOMERS.USERNAME, detail.username)
+        .set(CUSTOMERS.EMAIL, detail.email)
+        .set(CUSTOMERS.CREATED_AT, detail.createdAt)
+        .set(CUSTOMERS.UPDATED_AT, detail.createdAt)
         .execute()
     }
   }
@@ -41,11 +41,11 @@ class CustomerRepository(
 //    }
 //  }
 
-  def find(email: Email): Future[Option[CustomerDetail]] = {
+  def find(username: Username): Future[Option[CustomerDetail]] = {
     Future {
       dsl
         .selectFrom(CUSTOMERS)
-        .where(CUSTOMERS.EMAIL.eq(email))
+        .where(CUSTOMERS.USERNAME.eq(username))
         .fetchOptional()
         .asScala
         .map(record ⇒ CustomerDetail(record.getUsername, record.getEmail, record.getCreatedAt, record.getUpdatedAt, 0))

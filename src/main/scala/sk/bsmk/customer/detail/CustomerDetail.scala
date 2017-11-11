@@ -8,4 +8,4 @@ final case class CustomerDetail(username: Username,
                                 email: Email,
                                 createdAt: LocalDateTime,
                                 updatedAt: LocalDateTime,
-                                points: Int)
+                                points: Int = 0)

@@ -6,7 +6,6 @@ import sk.bsmk.customer.CustomerActor.Register
 import sk.bsmk.customer.bookkeeper.Bookkeeper
 import sk.bsmk.customer.registrar.Registrar.RegisterCustomer
 import sk.bsmk.customer.CustomerActor
-import sk.bsmk.customer.detail.CustomerPersistenceId
 
 import scala.concurrent.{Future, Promise}
 
@@ -28,10 +27,7 @@ class Registrar(
   def register(registerCustomer: RegisterCustomer): Future[RegistrationResult] = registerCustomer match {
     case RegisterCustomer(data) ⇒
       logger.info("Registering {}", data)
-
-      val persistenceId = CustomerPersistenceId.fromUsername(data.username)
-      logger.debug("Generated '{}' for {}", persistenceId, data)
-      val newCustomer = actorSystem.actorOf(CustomerActor.props(persistenceId))
+      val newCustomer = actorSystem.actorOf(CustomerActor.props(data.username))
 
       val promise = Promise[RegistrationResult]
       newCustomer ! Register(data, promise)
