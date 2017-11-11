@@ -4,10 +4,37 @@ title Customer registration
 
 actor Customer as c
 actor Representative as re
-actor Mailman as m
 actor Registrar as r
 actor Bookkeeper as b
 
+c -->> re: register me with this email
+re <<-->> r: register this customer
 
+re -->> re: creates registration\n(also checks if this registration exists)
+alt registration exists
+re -> re: TODO
+else registration does not exist
+re -->> b: is there customer with this email?
+
+alt customer exists
+b -->> r: provides customer detail
+r -->> re: cannot register customer\nhere is detail of existing
+else customer doesn't exist
+b -->> r: no customer found
+r -> r: creates customer
+r -> r: change state of registration
+r -->> re: customer registered
+re -->> b: give me detail of customer
+
+alt customer not found
+b -->> re: customer not found
+re -> re: TODO
+else customer found
+b -->> re: provides customer detail
+end
+end
+end
+
+re -->> c: provides info
 
 @enduml
